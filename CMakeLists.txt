@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.16)
+project("autowap"
+        VERSION 0.1.0
+	DESCRIPTION "RaspberryPi Fallback WAP Setup"
+        LANGUAGES NONE
+)
+add_custom_command(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.deb
+    COMMAND ODIR=${CMAKE_CURRENT_SOURCE_DIR}/pkg SDIR=${CMAKE_CURRENT_SOURCE_DIR} VERS=${PROJECT_VERSION} make -f ${CMAKE_CURRENT_SOURCE_DIR}/pkg/Makefile all && touch ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.pkg
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/pkg/${PROJECT_NAME}.epm
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+
+add_custom_target(autowap_pkg ALL
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.deb
+)

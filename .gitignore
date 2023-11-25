@@ -1,0 +1,7 @@
+*.swp
+.idea/
+/linux-5.*/
+*.log
+autohs-nmcli.package
+build/
+
