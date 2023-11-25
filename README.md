@@ -1,4 +1,3 @@
-merg.org.uk
 This is a reworking for Raspbian release 'bookworm' of part of the AutoHotspot functionality
 that derives from RaspberryConnect code AutoHotspot-Installer on GitHub.
 
