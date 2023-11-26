@@ -2,6 +2,6 @@
 .idea/
 /linux-5.*/
 *.log
-autohs-nmcli.package
+autowap.pkg
 build/
 

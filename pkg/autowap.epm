@@ -26,7 +26,10 @@ $service=/usr/lib/systemd/system
 %description A service to set up a WAP if no configured WiFi routers can be found
 %version ${version}
 
+%requires dnsmasq
+%requires hostapd
 %requires network-manager
+%requires wpasupplicant
 
 %incompat autohs
 
