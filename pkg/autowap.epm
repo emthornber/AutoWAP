@@ -7,7 +7,7 @@
 #   Created
 #
 #   27 November, 2023 - E M Thornber
-#   Changed name of service script autowapctl
+#   Changed name of service script to autowapctl
 #
 ################################################################################
 #
@@ -29,10 +29,7 @@ $service=/usr/lib/systemd/system
 %description A service to set up a WAP if no configured WiFi routers can be found
 %version ${version}
 
-%requires dnsmasq
-%requires hostapd
 %requires network-manager
-%requires wpasupplicant
 
 %incompat autohs
 
@@ -55,13 +52,13 @@ f 644 root root ${autowap}/autowap.conf   ${srcdir}/${config}/autowap.conf
 %postinstall <<EOF
 
 ${SCTL} daemon-reload
-${SCTL} enable autowap
+${SCTL} enable autowapctl
 
 EOF
 
 %preremove <<EOF
 
 ${SCTL} stop autowap
-${SCTL} disable autowap
+${SCTL} disable autowapctl
 
 EOF
