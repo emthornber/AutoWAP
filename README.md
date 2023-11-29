@@ -21,7 +21,5 @@ Use dpkg to install the package ...
 
 `dpkg --purge autowap`
 
-Mark Thornber
-M3748
-merg.org.uk
+Mark Thornber [MERG 3748](merg.org.uk).
 
