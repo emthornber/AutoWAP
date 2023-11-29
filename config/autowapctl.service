@@ -1,9 +1,13 @@
 [Unit]
 Description=Generates a Wireless Access Point when a valid SSID is not in range
 After=network-online.target
+
 [Service]
 Type=oneshot
+ExecStart=/usr/local/bin/autowapctl start
+ExecStop=/usr/local/bin/autowapctl stop
+ExecReload=/usr/local/bin/autowapctl restart
 RemainAfterExit=yes
-ExecStart=/usr/local/bin/autowap
+
 [Install]
 WantedBy=network-online.target

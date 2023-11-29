@@ -13,9 +13,13 @@ companion package canpi-web-app-ssr running on the Raspberry Pi.
 
 # Installation
 
-Use dpkg to install the package which requires dnsmasq, hostapd, and wpasupplicant
-package to be installed on the system.  This can be done using apt.
+Use dpkg to install the package ...
 
-Mark Thornber
-merg.org.uk
+`dpkg --install autowap-0.2.0-linux-5.1-all.deb`
+
+... and uninstall 
+
+`dpkg --purge autowap`
+
+Mark Thornber [MERG 3748](merg.org.uk).
 

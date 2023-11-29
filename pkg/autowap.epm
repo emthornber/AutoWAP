@@ -6,6 +6,9 @@
 #   24 November, 2023 - E M Thornber
 #   Created
 #
+#   27 November, 2023 - E M Thornber
+#   Changed name of service script to autowapctl
+#
 ################################################################################
 #
 # Utilities
@@ -26,10 +29,7 @@ $service=/usr/lib/systemd/system
 %description A service to set up a WAP if no configured WiFi routers can be found
 %version ${version}
 
-%requires dnsmasq
-%requires hostapd
 %requires network-manager
-%requires wpasupplicant
 
 %incompat autohs
 
@@ -43,8 +43,8 @@ d 755 root root /usr/local/etc -
 d 755 root root $autowap -
 
 # AutoHotspot script, and service
-f 755 root root ${bindir}/autowap          ${srcdir}/${script}/autowap.bash
-f 644 root root ${service}/autowap.service ${srcdir}/${config}/autowap.service
+f 755 root root ${bindir}/autowapctl          ${srcdir}/${script}/autowapctl.bash
+f 644 root root ${service}/autowapctl.service ${srcdir}/${config}/autowapctl.service
 
 # AutoHotspot configuration files
 f 644 root root ${autowap}/autowap.conf   ${srcdir}/${config}/autowap.conf
@@ -52,13 +52,13 @@ f 644 root root ${autowap}/autowap.conf   ${srcdir}/${config}/autowap.conf
 %postinstall <<EOF
 
 ${SCTL} daemon-reload
-${SCTL} enable autowap
+${SCTL} enable autowapctl
 
 EOF
 
 %preremove <<EOF
 
 ${SCTL} stop autowap
-${SCTL} disable autowap
+${SCTL} disable autowapctl
 
 EOF
