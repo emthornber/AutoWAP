@@ -4,4 +4,4 @@
 *.log
 autowap.pkg
 build/
-
+hotspot.cfg
