@@ -1,7 +1,7 @@
 ################################################################################
 #   EPM configuration file to create the autowap package
 #
-#   Note: Expects ${srcdir} to be defined externally
+#   Note: Expects ${srcdir} and ${pkgver} to be defined externally
 #
 #   24 November, 2023 - E M Thornber
 #   Created
@@ -15,7 +15,7 @@
 $AWK=/usr/bin/awk
 $SCTL=/usr/bin/systemctl
 # Directories
-$autowap=/usr/local/etc/autowap
+$mergcfg=/usr/local/etc/merg
 $bindir=/usr/local/bin
 $config=config
 $script=scripts
@@ -27,7 +27,7 @@ $service=/usr/lib/systemd/system
 %license LICENSE
 %readme README.md
 %description A service to set up a WAP if no configured WiFi routers can be found
-%version ${version}
+%version ${pkgver}
 
 %requires network-manager
 
@@ -40,14 +40,15 @@ d 755 root root ${service} -
 d 755 root root /usr/local -
 d 755 root root ${bindir} -
 d 755 root root /usr/local/etc -
-d 755 root root $autowap -
+d 755 root root $mergcfg -
 
 # AutoHotspot script, and service
 f 755 root root ${bindir}/autowapctl          ${srcdir}/${script}/autowapctl.bash
 f 644 root root ${service}/autowapctl.service ${srcdir}/${config}/autowapctl.service
 
 # AutoHotspot configuration files
-f 644 root root ${autowap}/autowap.conf   ${srcdir}/${config}/autowap.conf
+f 644 root root ${mergcfg}/hotspot.config   ${srcdir}/${config}/hotspot.config
+f 644 root root ${mergcfg}/hotspot-config-defn.json   ${srcdir}/${config}/hotspot-config-defn.json
 
 %postinstall <<EOF
 
