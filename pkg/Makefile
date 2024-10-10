@@ -13,7 +13,7 @@
 #	Working directory is assumed to be ${CMAKE_CURRENT_SOURCE_DIR}
 ################################################################################
 
-EPM=/usr/bin/epm
+EPM := $(shell which epm)
 PKGNAME=autowap
 PKGDEFN=autowap.epm
 RM=/usr/bin/rm -f

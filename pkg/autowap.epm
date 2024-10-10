@@ -9,13 +9,19 @@
 #   27 November, 2023 - E M Thornber
 #   Changed name of service script to autowapctl
 #
+#   01 January, 2024 - E M Thornber
+#   Renamed installed config file to the common name 'hotspot.conf'
+#
+#   10 October, 2024 - E M Thornber
+#   Added changelog file definition (after updating EPM)
+#
 ################################################################################
 #
 # Utilities
 $AWK=/usr/bin/awk
 $SCTL=/usr/bin/systemctl
 # Directories
-$autowap=/usr/local/etc/autowap
+$hotspot=/usr/local/etc/hotspot
 $bindir=/usr/local/bin
 $config=config
 $script=scripts
@@ -40,14 +46,17 @@ d 755 root root ${service} -
 d 755 root root /usr/local -
 d 755 root root ${bindir} -
 d 755 root root /usr/local/etc -
-d 755 root root $autowap -
+d 755 root root $hotspot -
 
 # AutoHotspot script, and service
 f 755 root root ${bindir}/autowapctl          ${srcdir}/${script}/autowapctl.bash
 f 644 root root ${service}/autowapctl.service ${srcdir}/${config}/autowapctl.service
 
 # AutoHotspot configuration files
-f 644 root root ${autowap}/autowap.conf   ${srcdir}/${config}/autowap.conf
+f 644 root root ${hotspot}/hotspot.cfg   ${srcdir}/${config}/autowap.conf
+f 644 root root ${hotspot}/hotspot.json   ${srcdir}/${config}/autowap-config-defn.json
+
+%literal(changelog) CHANGES.md
 
 %postinstall <<EOF
 

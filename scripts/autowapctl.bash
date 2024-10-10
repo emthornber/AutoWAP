@@ -4,7 +4,7 @@
 #       autowapctl.bash
 #   A service to start a Wireless Access Point (WAP) if there is no
 #   connection to a local wifi network.  This service is a 'one-shot'
-#   that runs after the netork-online target has been achieved.
+#   that runs after the network-online target has been achieved.
 #
 #   25 November, 2023 - E M Thornber
 #   Created
@@ -48,7 +48,7 @@ HS_CONN="Hotspot"
 
 #
 # --------------------                             --------------------
-# |||||||||||||||||||| START CONFIGURATION SECTION ||||||||||||||||||||
+# |||||||||||||||||||| END CONFIGURATION SECTION ||||||||||||||||||||
 #
 
 ERROR=0
@@ -63,22 +63,22 @@ start)
     # See if wifi is connected to a local network
     if $NMCLI --fields device --terse connection show --active | $GREP -q $WIFI_DEV
     then
-	# connected so nothing to do
-	echo Local network available on $WIFI_DEV
+		# connected so nothing to do
+		echo Local network available on $WIFI_DEV
     else
-	# Create hotspot connection
-	$NMCLI device wifi hotspot ifname $WIFI_DEV con-name $HS_CONN \
-	    ssid $ap_ssid band bg channel $ap_channel password "$ap_password"
-	ERROR=$?
-	if [ "$ERROR" = 0 ] ; then
-	    $NMCLI device modify $WIFI_DEV ipv4.addresses $HSADDR
-	    ERROR=$?
-	    if [ "$ERROR" != 0 ] ; then
-		WHERE="device modify"
-	    fi
-	else
-	    WHERE="device hotspot"
-	fi
+		# Create hotspot connection
+		$NMCLI device wifi hotspot ifname $WIFI_DEV con-name $HS_CONN \
+			ssid $ap_ssid band bg channel $ap_channel password "$ap_password"
+		ERROR=$?
+		if [ "$ERROR" = 0 ] ; then
+			$NMCLI device modify $WIFI_DEV ipv4.addresses $HSADDR
+			ERROR=$?
+			if [ "$ERROR" != 0 ] ; then
+			WHERE="device modify"
+			fi
+		else
+			WHERE="device hotspot"
+		fi
     fi
     ;;
 stop|restart)
