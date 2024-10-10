@@ -53,8 +53,8 @@ f 755 root root ${bindir}/autowapctl          ${srcdir}/${script}/autowapctl.bas
 f 644 root root ${service}/autowapctl.service ${srcdir}/${config}/autowapctl.service
 
 # AutoHotspot configuration files
-f 644 root root ${hotspot}/hotspot.cfg   ${srcdir}/${config}/autowap.conf
-f 644 root root ${hotspot}/hotspot.json   ${srcdir}/${config}/autowap-config-defn.json
+f 644 root root ${hotspot}/hotspot.cfg  ${srcdir}/${config}/autowap.conf
+f 644 root root ${hotspot}/hotspot.json ${srcdir}/${config}/autowap-config-defn.json
 
 %literal(changelog) CHANGES.md
 
