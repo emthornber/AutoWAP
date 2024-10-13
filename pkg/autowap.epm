@@ -1,7 +1,7 @@
 ################################################################################
 #   EPM configuration file to create the autowap package
 #
-#   Note: Expects ${srcdir} to be defined externally
+#   Note: Expects ${srcdir} and $(version) to be defined externally
 #
 #   24 November, 2023 - E M Thornber
 #   Created
@@ -15,6 +15,8 @@
 #   10 October, 2024 - E M Thornber
 #   Added changelog file definition (after updating EPM)
 #
+#   11 October, 2024 - E M Thornber
+#   Added external version string definition
 ################################################################################
 #
 # Utilities

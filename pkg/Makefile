@@ -5,6 +5,9 @@
 #	24 November, 2023 - E M Thornber
 #	Created
 #
+#	11 October, 2024 - E M Thornber
+#	Streamlined targets
+#
 #	EVs required
 #	ODIR - where to place the .deb file
 #	SDIR - current source directory
@@ -14,21 +17,16 @@
 ################################################################################
 
 EPM := $(shell which epm)
-PKGNAME=autowap
-PKGDEFN=autowap.epm
+PKGNAME := $(shell basename %{SDIR} | tr '[:upper:]' '[:lower:'] )
+PKGDEFN := $(SDIR)/pkg/$(PKGNAME).epm
 RM=/usr/bin/rm -f
 TS=`date "+%y%m%d-%H%M"`
 CFG_BASE=./config
 
-all: clean pkgs
-
-clean:
-	$(RM) *.log
+all: pkgs
 
 pkgs: portable deb
 
-portable:
-	$(EPM) -a all -f portable -vv --output-dir $(ODIR) srcdir=$(SDIR) version=$(VERS) $(PKGNAME) $(SDIR)/pkg/$(PKGDEFN) | tee portable-$(TS).log
-
-deb:
-	$(EPM) -a all -f deb      -vv --output-dir $(ODIR) srcdir=$(SDIR) version=$(VERS) $(PKGNAME) $(SDIR)/pkg/$(PKGDEFN) | tee deb-$(TS).log
+deb portable:
+	sudo $(RM) $(ODIR)/$@-*.log
+	sudo $(EPM) -a all -f $@ -vv --output-dir $(ODIR) srcdir=$(SDIR) version=$(VERS) $(PKGNAME) $(PKGDEFN) 2>&1 | tee $@-$(TS).log
