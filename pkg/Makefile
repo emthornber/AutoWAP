@@ -8,6 +8,9 @@
 #	11 October, 2024 - E M Thornber
 #	Streamlined targets
 #
+#	28 December, 2024 - E M Thornber
+#	Corrected destination of build log files
+#
 #	EVs required
 #	ODIR - where to place the .deb file
 #	SDIR - current source directory
@@ -29,4 +32,4 @@ pkgs: portable deb
 
 deb portable:
 	sudo $(RM) $(ODIR)/$@-*.log
-	sudo $(EPM) -a all -f $@ -vv --output-dir $(ODIR) srcdir=$(SDIR) version=$(VERS) $(PKGNAME) $(PKGDEFN) 2>&1 | tee $@-$(TS).log
+	sudo $(EPM) -a all -f $@ -vv --output-dir $(ODIR) srcdir=$(SDIR) version=$(VERS) $(PKGNAME) $(PKGDEFN) 2>&1 | tee $(ODIR)/$@-$(TS).log

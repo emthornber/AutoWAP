@@ -13,12 +13,17 @@
 #   Script name change
 #   Add entry points for shutdown and restart
 #
+#   28 December, 2024 - E M Thornber
+#   Add pigpiod service check
+#   Add LED control
+#
 ################################################################################
 
 AWK="/usr/bin/awk"
 GREP="/usr/bin/grep"
 IW="/usr/sbin/iw"
 NMCLI="/usr/bin/nmcli"
+PY3="/usr/bin/python3"
 
 #
 ARGV="$@"
@@ -38,6 +43,7 @@ else
     ap_password="1234567890"
     ap_channel=6
     ap_network="192.168.45.1"
+    ap_gpio_pin=22
 fi
 
 # Create IP Address for WAP
@@ -45,6 +51,15 @@ HSADDR=`echo $ap_network | $AWK -F'.' '{ OFS = "." ; print $1, $2, $3, "254/24" 
 
 # Connection ID of WAP
 HS_CONN="Hotspot"
+
+setup_pigpiod() {
+    # Check status of pigpiod service
+    systemctl --quiet is-active pigpiod
+    if [ $? -ne 0 ]
+    then
+        systemctl start pigpiod
+    fi
+}
 
 #
 # --------------------                             --------------------
@@ -60,11 +75,15 @@ fi
 
 case "$ARGV" in
 start)
+	# Start pigpiod service
+	setup_pigpiod
     # See if wifi is connected to a local network
     if $NMCLI --fields device --terse connection show --active | $GREP -q $WIFI_DEV
     then
 		# connected so nothing to do
 		echo Local network available on $WIFI_DEV
+        # Turn the Red LED off
+        $PY3 gpio_set_pin_value.py -g $ap_gpio_pin -v off
     else
 		# Create hotspot connection
 		$NMCLI device wifi hotspot ifname $WIFI_DEV con-name $HS_CONN \
@@ -79,6 +98,8 @@ start)
 		else
 			WHERE="device hotspot"
 		fi
+        # Turn the Red LED on
+        $PY3 gpio_set_pin_value.py -g $ap_gpio_pin -v on
     fi
     ;;
 stop|restart)

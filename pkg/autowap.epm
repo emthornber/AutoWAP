@@ -17,6 +17,10 @@
 #
 #   11 October, 2024 - E M Thornber
 #   Added external version string definition
+#
+#   27 December, 2024 - E M Thornber
+#   Added GPIO script
+#
 ################################################################################
 #
 # Utilities
@@ -30,7 +34,7 @@ $script=scripts
 $service=/usr/lib/systemd/system
 
 %product Create a WAP on a RPi if home WiFi is not available
-%copyright 2023 merg.org.uk
+%copyright 2024 merg.org.uk
 %vendor Enchanted Systems Limited
 %license LICENSE
 %readme README.md
@@ -51,8 +55,9 @@ d 755 root root /usr/local/etc -
 d 755 root root $hotspot -
 
 # AutoHotspot script, and service
-f 755 root root ${bindir}/autowapctl          ${srcdir}/${script}/autowapctl.bash
-f 644 root root ${service}/autowapctl.service ${srcdir}/${config}/autowapctl.service
+f 755 root root ${bindir}/autowapctl            ${srcdir}/${script}/autowapctl.bash
+f 755 root root ${bindir}/gpio_set_pin_value.py ${srcdir}/${script}/gpio_set_pin_value.py
+f 644 root root ${service}/autowapctl.service   ${srcdir}/${config}/autowapctl.service
 
 # AutoHotspot configuration files
 f 644 root root ${hotspot}/hotspot.cfg  ${srcdir}/${config}/autowap.conf

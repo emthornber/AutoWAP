@@ -1,3 +1,10 @@
+autowap (1.0.2) bookworm; urgency=low
+  * Added functionality to light the Red LED if the WAP has been created. 
+  * Added the attribute definition for GPIO Pin number of the Red LED fo ruse by
+  * the maintence web wpp. This attribute is Display Only.
+  
+-- Mark Thornber <mark.thornber@gmail.com> Thu, 28 Dec 2024 11:08:00 +0100
+
 autowap (1.0.1) bookworm; urgency=low
   * Update package definition to define 'changelog' as CHANGES.md
   * Added attribute definition for maintenance web app
