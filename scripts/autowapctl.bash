@@ -35,9 +35,8 @@ ARGV="$@"
 WIFI_DEV=`$IW dev | $AWK '/Interface/ { print $2 }'`
 
 # Read configuration
-AUTOWAP_ENVVARS="/usr/local/etc/autowap/autowap.conf"
-if test -f $AUTOWAP_ENVVARS ; then
-    . $AUTOWAP_ENVVARS
+if test -f "$HTSPT_INI_FILE" ; then
+    . $HTSPT_INI_FILE
 else
     ap_ssid="canpiwi"
     ap_password="1234567890"
@@ -83,7 +82,7 @@ start)
 		# connected so nothing to do
 		echo Local network available on $WIFI_DEV
         # Turn the Red LED off
-        $PY3 gpio_set_pin_value.py -g $ap_gpio_pin -v off
+        $PY3 /usr/local/bin/gpio_set_pin_value.py -g $ap_gpio_pin -v off
     else
 		# Create hotspot connection
 		$NMCLI device wifi hotspot ifname $WIFI_DEV con-name $HS_CONN \
@@ -99,7 +98,7 @@ start)
 			WHERE="device hotspot"
 		fi
         # Turn the Red LED on
-        $PY3 gpio_set_pin_value.py -g $ap_gpio_pin -v on
+        $PY3 /usr/local/bin/gpio_set_pin_value.py -g $ap_gpio_pin -v on
     fi
     ;;
 stop|restart)

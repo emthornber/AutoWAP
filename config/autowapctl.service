@@ -4,6 +4,9 @@ After=network-online.target
 
 [Service]
 Type=oneshot
+WorkingDirectory=/usr/local/etc/hotspot
+Environment="HTSPT_HOME=/usr/local/etc/hotspot"
+Environment="HTSPT_INI_FILE=/usr/local/etc/hotspot/hotspot.cfg"
 ExecStart=/usr/local/bin/autowapctl start
 ExecStop=/usr/local/bin/autowapctl stop
 ExecReload=/usr/local/bin/autowapctl restart
