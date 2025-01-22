@@ -1,6 +1,10 @@
 [Unit]
 Description=Generates a Wireless Access Point when a valid SSID is not in range
+Wants=canpi-ssr.service
+Wants=pigpiod.service
 After=network-online.target
+After=pigpiod.service
+Before=canpi-ssr.service
 
 [Service]
 Type=oneshot

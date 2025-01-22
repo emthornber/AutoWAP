@@ -17,6 +17,10 @@
 #   Add pigpiod service check
 #   Add LED control
 #
+#   22 January, 2025 - E M Thornber
+#   Remove pigpiod service check - not needed
+#   Improved Hotspot configuration
+#
 ################################################################################
 
 AWK="/usr/bin/awk"
@@ -51,15 +55,6 @@ HSADDR=`echo $ap_network | $AWK -F'.' '{ OFS = "." ; print $1, $2, $3, "254/24" 
 # Connection ID of WAP
 HS_CONN="Hotspot"
 
-setup_pigpiod() {
-    # Check status of pigpiod service
-    systemctl --quiet is-active pigpiod
-    if [ $? -ne 0 ]
-    then
-        systemctl start pigpiod
-    fi
-}
-
 #
 # --------------------                             --------------------
 # |||||||||||||||||||| END CONFIGURATION SECTION ||||||||||||||||||||
@@ -74,8 +69,6 @@ fi
 
 case "$ARGV" in
 start)
-	# Start pigpiod service
-	setup_pigpiod
     # See if wifi is connected to a local network
     if $NMCLI --fields device --terse connection show --active | $GREP -q $WIFI_DEV
     then
@@ -84,15 +77,19 @@ start)
         # Turn the Red LED off
         $PY3 /usr/local/bin/gpio_set_pin_value.py -g $ap_gpio_pin -v off
     else
+        # not connected so start hotspot
+        echo Starting hotspot on $WIFI_DEV
 		# Create hotspot connection
 		$NMCLI device wifi hotspot ifname $WIFI_DEV con-name $HS_CONN \
-			ssid $ap_ssid band bg channel $ap_channel password "$ap_password"
+			ssid $ap_ssid band bg channel $ap_channel password $ap_password
 		ERROR=$?
 		if [ "$ERROR" = 0 ] ; then
-			$NMCLI device modify $WIFI_DEV ipv4.addresses $HSADDR
+			$NMCLI connection modify $HS_CONN ipv4.method shared
+			$NMCLI connection modify $HS_CONN ipv4.addresses $HSADDR
+            $NMCLI connection up $HS_CONN
 			ERROR=$?
 			if [ "$ERROR" != 0 ] ; then
-			WHERE="device modify"
+			WHERE="connection modify"
 			fi
 		else
 			WHERE="device hotspot"
@@ -102,7 +99,7 @@ start)
     fi
     ;;
 stop|restart)
-    if $NMCLI --terse connection show | $GREP -q $HS_CONN
+    if $NMCLI --terse connection show --active | $GREP -q $HS_CONN
     then
 	# Remove hotspot connection
 	$NMCLI connection delete id $HS_CONN

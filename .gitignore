@@ -3,6 +3,8 @@
 /linux-5.*/
 *.log
 autowap.pkg
-autowap.conf
+*.conf
 build/
 
+
+.codegpt
