@@ -5,6 +5,7 @@
 autowap.pkg
 *.conf
 build/
-
+*.deb
+*.tar.gz
 
 .codegpt

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project("autowap"
-        VERSION 1.0.3
+        VERSION 1.0.4
 	DESCRIPTION "RaspberryPi Fallback WAP Setup"
         LANGUAGES NONE
 )
