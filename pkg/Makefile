@@ -13,6 +13,7 @@
 #
 #	EVs required
 #	ODIR - where to place the .deb file
+#	PKGNAME - package name
 #	SDIR - current source directory
 #	VERS - package version
 #
@@ -20,7 +21,6 @@
 ################################################################################
 
 EPM := $(shell which epm)
-PKGNAME := $(shell basename ${SDIR} | tr '[:upper:]' '[:lower:]' )
 PKGDEFN := $(SDIR)/pkg/$(PKGNAME).epm
 RM=/usr/bin/rm -f
 TS=`date "+%y%m%d-%H%M"`
