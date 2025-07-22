@@ -2,8 +2,8 @@
   "ap_ssid": {
     "prompt": "AP SSID",
     "tooltip": "SSID of Access Point network",
-    "current": "HolywellTown",
-    "default": "HolywellTown",
+    "current": "MERGPi",
+    "default": "MERGPi",
     "format": "[a-zA-Z0-9]{1,}",
     "action": "Edit"
   },

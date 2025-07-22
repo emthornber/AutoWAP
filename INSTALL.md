@@ -17,27 +17,32 @@ repository along with a downloadable script to carry out those instructions.
 
 The .deb package is built using Easy Package Manager (EPM) (`emthornber/epm` tag
 `v5.0.1rc2`) which is built from source using the usual autotools incantation
+
 ```
 ./configure
 make
 sudo make install
 ```
 
-The build system used is [cmake](https://cmake.org) 
+The build system used is [cmake](https://cmake.org)
+
 ```
 cmake -S . -B build
-cmake --build build
+cmake --build build --clean-first
 ```
 
 # Installation
 
 After a successful build there is a Debian package (and a portable tarball) in
 `./pkg` e.g.
+
 ```
 autowap-1.0.3-linux-6.6-all.deb
 autowap-1.0.3-linux-6.6-all.tar.gz
 ```
+
 which can be installed using `apt`
+
 ```
 sudo apt install ./pkg/autowap-1.0.3-linux-6.6-all.tar.gz
 ```
