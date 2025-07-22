@@ -13,12 +13,12 @@ Repository](https://emthornber.github.io/rpirepo).  Visiting the site displays
 instructions on how to setup the apt configuration to access the MERG-DEV
 repository along with a downloadable script to carry out those instructions.
 
-# Compiling
+## Compiling
 
 The .deb package is built using Easy Package Manager (EPM) (`emthornber/epm` tag
 `v5.0.1rc2`) which is built from source using the usual autotools incantation
 
-```
+```bash
 ./configure
 make
 sudo make install
@@ -26,23 +26,23 @@ sudo make install
 
 The build system used is [cmake](https://cmake.org)
 
-```
+```bash
 cmake -S . -B build
 cmake --build build --clean-first
 ```
 
-# Installation
+## Installation
 
 After a successful build there is a Debian package (and a portable tarball) in
 `./pkg` e.g.
 
-```
+```bash
 autowap-1.0.3-linux-6.6-all.deb
 autowap-1.0.3-linux-6.6-all.tar.gz
 ```
 
 which can be installed using `apt`
 
-```
+```bash
 sudo apt install ./pkg/autowap-1.0.3-linux-6.6-all.tar.gz
 ```
