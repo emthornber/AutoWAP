@@ -11,6 +11,9 @@
 #	28 December, 2024 - E M Thornber
 #	Corrected destination of build log files
 #
+#   22 November, 2025 - E M Thornber
+#   Updated package file name to remove release information
+#
 #	EVs required
 #	ODIR - where to place the .deb file
 #	PKGNAME - package name
@@ -32,4 +35,4 @@ pkgs: portable deb
 
 deb portable:
 	sudo $(RM) $(ODIR)/$@-*.log
-	sudo $(EPM) -a all -f $@ -vv --output-dir $(ODIR) srcdir=$(SDIR) version=$(VERS) $(PKGNAME) $(PKGDEFN) 2>&1 | tee $(ODIR)/$@-$(TS).log
+	sudo $(EPM) -a all -f $@ -nsm -vv --output-dir $(ODIR) srcdir=$(SDIR) version=$(VERS) $(PKGNAME) $(PKGDEFN) 2>&1 | tee $(ODIR)/$@-$(TS).log
