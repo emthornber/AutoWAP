@@ -2,7 +2,7 @@
 
 autowap (1.0.6) bookworm; urgency=low
 
-- Changed package file name to remove release number
+- Changed package filename to remove release number and add distribution name
 
 -- Mark Thornber <mark.thornber@gmail.com> Sat 22 Nov 2025 10:45:00 +0000
 
