@@ -1,8 +1,13 @@
 #
 
-autowap (1.0.6) bookworm; urgency=low
+autowap (1.0.7) bookworm; urgency=low
 
-- Changed package filename to remove release number and add distribution name
+- Reworked creation of Access Point.
+- Hide ap_channel configuration item as no longer used.
+
+-- Mark Thornber <mark.thornber@gmail.com> Thu, 11 Dec 2025 09:56:27 +0000
+
+- Changed package filename to remove PiOS release number and add distribution name.
 
 -- Mark Thornber <mark.thornber@gmail.com> Sat 22 Nov 2025 10:45:00 +0000
 
