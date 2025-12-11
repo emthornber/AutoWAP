@@ -21,12 +21,17 @@
 #   Remove pigpiod service check - not needed
 #   Improved Hotspot configuration
 #
+#   09 December, 2025 - E M Thornber
+#   Changed the way an access point is created.
+#   (Now uses `nmcli connection add ...`)
+#
 ################################################################################
 
 AWK="/usr/bin/awk"
 GREP="/usr/bin/grep"
 IW="/usr/sbin/iw"
 NMCLI="/usr/bin/nmcli"
+NMCONDIR="/etc/NetworkManager/system-connections"
 PY3="/usr/bin/python3"
 
 #
@@ -77,15 +82,22 @@ start)
         # Turn the Red LED off
         $PY3 /usr/local/bin/gpio_set_pin_value.py -g $ap_gpio_pin -v off
     else
-        # not connected so start hotspot
+        # Not connected so start hotspot
         echo Starting hotspot on $WIFI_DEV
+        # Delete any existing hotspot connection
+        [ -f $NMCONDIR/"$HS_CONN.nmconnection" ] && \
+            $NMCLI connection delete id $HS_CONN
 		# Create hotspot connection
-		$NMCLI device wifi hotspot ifname $WIFI_DEV con-name $HS_CONN \
-			ssid $ap_ssid band bg channel $ap_channel password $ap_password
+		$NMCLI connection add type wifi ifname $WIFI_DEV mode ap con-name $HS_CONN \
+			ssid $ap_ssid autoconnect false
 		ERROR=$?
 		if [ "$ERROR" = 0 ] ; then
 			$NMCLI connection modify $HS_CONN ipv4.method shared
 			$NMCLI connection modify $HS_CONN ipv4.addresses $HSADDR
+			$NMCLI connection modify $HS_CONN ipv6.method disabled
+            $NMCLI connection modify $HS_CONN wifi-sec.key-mgmt wpa-psk
+            $NMCLI connection modify $HS_CONN wifi-sec.psk "$ap_password"
+
             $NMCLI connection up $HS_CONN
 			ERROR=$?
 			if [ "$ERROR" != 0 ] ; then
@@ -101,14 +113,14 @@ start)
 stop|restart)
     if $NMCLI --terse connection show --active | $GREP -q $HS_CONN
     then
-	# Remove hotspot connection
-	$NMCLI connection delete id $HS_CONN
-	ERROR=$?
-	if [ "$ERROR" != 0 ] ; then
-	    WHERE="connection delete"
-	fi
+        # Remove hotspot connection
+        $NMCLI connection delete id $HS_CONN
+        ERROR=$?
+        if [ "$ERROR" != 0 ] ; then
+            WHERE="connection delete"
+        fi
     else
-	echo No hotspot connection to remove
+        echo No hotspot connection to remove
     fi
     ;;
 *)

@@ -21,7 +21,7 @@
     "current": "6",
     "default": "6",
     "format": "[1-9])|(1[0-3])",
-    "action": "Edit"
+    "action": "Hide"
   },
   "ap_network": {
     "prompt": "AP Network address",
