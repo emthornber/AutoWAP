@@ -1,8 +1,9 @@
 # AutoWAP
 
-This is a reworking for Raspbian release 'bookworm' of part of the AutoHotspot
+This is an update for Raspbian release 'trixie' of part of the AutoHotspot
 functionality that derives from RaspberryConnect code AutoHotspot-Installer on
-GitHub.
+GitHub.  This is V2 of AutoWAP that uses libgpiod library.  The prior version V1
+uses pigpiod which is not supported by trixie.
 
 The functionality is focussed on providing a Wireless Access Point (WAP)
 if, when the network comes online, there is no connection to a local

@@ -44,7 +44,7 @@ autowap-1.0.3-linux-6.6-all.tar.gz
 which can be installed using `apt`
 
 ```bash
-sudo apt install ./pkg/autowap-1.0.3-linux-6.6-all.deb
+sudo apt install ./pkg/autowap-2.0.0-trixie-all.deb
 ```
 
 or using the `autowap.install` script from the unpacked tarball.
