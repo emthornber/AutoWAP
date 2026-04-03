@@ -17,6 +17,12 @@
 #   01 February, 2026 - E M Thornber
 #   Created from gpio_set_pin_value.py to use libgpiod instead of pigpio.
 #
+#   3 April, 2026 - E M Thornber
+#   Updated with code from toggle_line_value.py in libgpiod bindings/python/examples
+#
+#   Note: The libgpiod library has been amended for PiOS to make GPIO pin output
+#   states persistent.
+#
 ################################################################################
 import argparse
 
@@ -37,7 +43,7 @@ def parse_command_line():
     parser.add_argument('-v', '--gpio_pin_value', choices=['off', 'on'], default='on', help='(default: %(default)s)')
     args = parser.parse_args()
     if args.debug:
-        print(args.gpio_pin_number, translate_pin_value(args.gpio_pin_value))
+        print(args.gpio_pin_number, args.gpio_pin_value)
     return args
  
 # Convert 'on' or 'off' to Value.ACTIVE or Value.INACTIVE
@@ -47,8 +53,6 @@ def translate_pin_value(toggle):
     return Value.INACTIVE
 
 def set_line_value(chip_path, line_offset, line_value):
-    value_str = {Value.ACTIVE: 'ACTIVE', Value.INACTIVE: 'INACTIVE'}
-    value = Value.INACTIVE
     with gpiod.request_lines(
         chip_path,
         consumer='libgpiod_set_pin_value',
