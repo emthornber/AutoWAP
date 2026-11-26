@@ -25,6 +25,10 @@
 #   Changed the way an access point is created.
 #   (Now uses `nmcli connection add ...`)
 #
+#   26 November, 2026 - K Bruce
+#   Read the configuration file without running it as shell commands,
+#   check the values used, and quote them in the nmcli commands
+#
 ################################################################################
 
 AWK="/usr/bin/awk"
@@ -44,18 +48,46 @@ ARGV="$@"
 WIFI_DEV=`$IW dev | $AWK '/Interface/ { print $2 }'`
 
 # Read configuration
-if test -f "$HTSPT_INI_FILE" ; then
-    . $HTSPT_INI_FILE
-else
-    ap_ssid="canpiwi"
-    ap_password="1234567890"
-    ap_channel=6
+#
+# The file is not sourced: the configuration web app writes it, and a value
+# must never run as a command here. A missing or unsuitable value falls back
+# to the default.
+
+# cfg_value KEY DEFAULT: print the value of the last KEY=... line in
+# $HTSPT_INI_FILE, without surrounding spaces or double quotes, or DEFAULT
+cfg_value() {
+    local line value=""
+    if [ -f "$HTSPT_INI_FILE" ] ; then
+        while IFS= read -r line || [ -n "$line" ] ; do
+            line=${line%$'\r'}
+            if [[ $line =~ ^[[:space:]]*$1[[:space:]]*=(.*)$ ]] ; then
+                value=${BASH_REMATCH[1]}
+                value=${value#"${value%%[![:space:]]*}"}
+                value=${value%"${value##*[![:space:]]}"}
+                if [[ $value == \"*\" ]] ; then value=${value:1:${#value}-2} ; fi
+            fi
+        done < "$HTSPT_INI_FILE"
+    fi
+    printf '%s' "${value:-$2}"
+}
+
+ap_ssid=$(cfg_value ap_ssid "canpiwi")
+ap_password=$(cfg_value ap_password "1234567890")
+ap_channel=$(cfg_value ap_channel 6)
+ap_network=$(cfg_value ap_network "192.168.45.1")
+ap_gpio_pin=$(cfg_value ap_gpio_pin 22)
+
+if [[ ! $ap_network =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]] ; then
+    echo "ap_network '$ap_network' not usable, using 192.168.45.1" >&2
     ap_network="192.168.45.1"
+fi
+if [[ ! $ap_gpio_pin =~ ^[0-9]{1,2}$ ]] ; then
+    echo "ap_gpio_pin '$ap_gpio_pin' not usable, using 22" >&2
     ap_gpio_pin=22
 fi
 
 # Create IP Address for WAP
-HSADDR=`echo $ap_network | $AWK -F'.' '{ OFS = "." ; print $1, $2, $3, "254/24" }'`
+HSADDR=`echo "$ap_network" | $AWK -F'.' '{ OFS = "." ; print $1, $2, $3, "254/24" }'`
 
 # Connection ID of WAP
 HS_CONN="Hotspot"
@@ -89,7 +121,7 @@ start)
             $NMCLI connection delete id $HS_CONN
 		# Create hotspot connection
 		$NMCLI connection add type wifi ifname $WIFI_DEV mode ap con-name $HS_CONN \
-			ssid $ap_ssid autoconnect false
+			ssid "$ap_ssid" autoconnect false
 		ERROR=$?
 		if [ "$ERROR" = 0 ] ; then
 			$NMCLI connection modify $HS_CONN ipv4.method shared
